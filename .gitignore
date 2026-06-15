@@ -1,0 +1,25 @@
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment variables (SECRET KEYS - never commit these)
+.env
+
+# Database file
+*.db
+*.sqlite3
+
+# ML model files (large - regenerate with training script)
+*.pkl
+*.joblib
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# VS Code settings
+.vscode/
