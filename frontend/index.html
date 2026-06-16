@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🛡️ AI Threat Detection Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-left">
+      <span class="logo">🛡️</span>
+      <div>
+        <h1>AI Threat Detection System</h1>
+        <p class="subtitle">Real-time log analysis and anomaly detection</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-badge" id="status-badge">
+        <span class="status-dot"></span>
+        <span>System Online</span>
+      </div>
+      <button class="refresh-btn" onclick="loadAllData()">↻ Refresh</button>
+    </div>
+  </header>
+
+  <!-- ── Main Layout ────────────────────────────────────── -->
+  <main class="main">
+
+    <!-- ── Stats Cards Row ──────────────────────────────── -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon blue">📋</div>
+        <div class="stat-info">
+          <span class="stat-label">Total Logs</span>
+          <span class="stat-value" id="total-logs">—</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon red">⚠️</div>
+        <div class="stat-info">
+          <span class="stat-label">Anomalies</span>
+          <span class="stat-value" id="total-anomalies">—</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple">🚨</div>
+        <div class="stat-info">
+          <span class="stat-label">Total Alerts</span>
+          <span class="stat-value" id="total-alerts">—</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon orange">🌐</div>
+        <div class="stat-info">
+          <span class="stat-label">Suspicious IPs</span>
+          <span class="stat-value" id="suspicious-ips">—</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">📊</div>
+        <div class="stat-info">
+          <span class="stat-label">Avg Threat Score</span>
+          <span class="stat-value" id="avg-score">—</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon red">🔴</div>
+        <div class="stat-info">
+          <span class="stat-label">Max Threat Score</span>
+          <span class="stat-value" id="max-score">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Charts Row ────────────────────────────────────── -->
+    <section class="charts-grid">
+
+      <!-- Threat Level Doughnut -->
+      <div class="chart-card">
+        <h2 class="chart-title">Threat Level Distribution</h2>
+        <div class="chart-wrapper">
+          <canvas id="threatLevelChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Timeline Line Chart -->
+      <div class="chart-card wide">
+        <h2 class="chart-title">Threat Activity by Hour</h2>
+        <div class="chart-wrapper">
+          <canvas id="timelineChart"></canvas>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── Top IPs + Alerts Row ──────────────────────────── -->
+    <section class="bottom-grid">
+
+      <!-- Top Suspicious IPs -->
+      <div class="card">
+        <h2 class="chart-title">Top Suspicious IPs</h2>
+        <div class="table-wrapper">
+          <table class="data-table" id="ip-table">
+            <thead>
+              <tr>
+                <th>IP Address</th>
+                <th>Attempts</th>
+                <th>Max Score</th>
+                <th>Level</th>
+              </tr>
+            </thead>
+            <tbody id="ip-table-body">
+              <tr><td colspan="4" class="loading">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Live Alerts -->
+      <div class="card">
+        <h2 class="chart-title">🚨 Live Alerts</h2>
+        <div class="alerts-list" id="alerts-list">
+          <p class="loading">Loading alerts…</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── Full Logs Table ───────────────────────────────── -->
+    <section class="card full-width">
+      <div class="table-header">
+        <h2 class="chart-title">Recent Log Entries</h2>
+        <div class="filter-row">
+          <select id="level-filter" onchange="filterLogs()">
+            <option value="">All Levels</option>
+            <option value="CRITICAL">Critical</option>
+            <option value="HIGH">High</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="LOW">Low</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Timestamp</th>
+              <th>IP Address</th>
+              <th>Username</th>
+              <th>Status</th>
+              <th>Failed Attempts</th>
+              <th>Threat Score</th>
+              <th>Level</th>
+            </tr>
+          </thead>
+          <tbody id="logs-table-body">
+            <tr><td colspan="7" class="loading">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── Analyse Single Log ────────────────────────────── -->
+    <section class="card full-width">
+      <h2 class="chart-title">🔍 Analyse a Log Entry</h2>
+      <p class="section-desc">Enter log details below to get an instant threat assessment from the AI model.</p>
+      <div class="analyse-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>IP Address</label>
+            <input type="text" id="f-ip" placeholder="e.g. 192.168.1.1" />
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="f-user" placeholder="e.g. root" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="f-status">
+              <option value="Failed">Failed</option>
+              <option value="Accepted">Accepted</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Failed Attempts</label>
+            <input type="number" id="f-attempts" placeholder="e.g. 25" value="1" />
+          </div>
+          <div class="form-group">
+            <label>Port</label>
+            <input type="number" id="f-port" placeholder="e.g. 22" value="22" />
+          </div>
+          <div class="form-group">
+            <label>Hour (0–23)</label>
+            <input type="number" id="f-hour" placeholder="e.g. 3" value="12" />
+          </div>
+        </div>
+        <button class="analyse-btn" onclick="analyseLog()">
+          🤖 Analyse with AI
+        </button>
+      </div>
+
+      <!-- Result Box -->
+      <div class="result-box" id="result-box" style="display:none">
+        <div class="result-score" id="result-score">0</div>
+        <div class="result-info">
+          <div class="result-level" id="result-level">—</div>
+          <div class="result-detail" id="result-detail">—</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>🛡️ AI Threat Detection System &nbsp;|&nbsp; Built with Python, Flask, Isolation Forest &nbsp;|&nbsp; Portfolio Project</p>
+  </footer>
+
+  <script src="dashboard.js"></script>
+
+</body>
+</html>
