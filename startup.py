@@ -1,26 +1,24 @@
-"""
-This file runs before gunicorn starts on Render.
-It generates data, trains the model, and sets up the database.
-"""
 import os
 import sys
 
-print("🚀 Running startup script …")
+print("Starting setup...")
 
-# Step 1: Generate logs if missing
-if not os.path.exists("data/sample_logs.csv"):
-    print("📊 Generating sample data …")
-    exec(open("data/generate_logs.py").read())
+# Create data folder if missing
+os.makedirs("data", exist_ok=True)
+os.makedirs("backend/models", exist_ok=True)
 
-# Step 2: Train model if missing
-if not os.path.exists("backend/models/isolation_forest.pkl"):
-    print("🤖 Training model …")
-    os.system(f"{sys.executable} ml/train_model.py")
+# Step 1: Generate logs
+print("Generating sample logs...")
+os.system(f"{sys.executable} data/generate_logs.py")
 
-# Step 3: Setup database
-print("📦 Setting up database …")
+# Step 2: Train model
+print("Training ML model...")
+os.system(f"{sys.executable} ml/train_model.py")
+
+# Step 3: Init database
+print("Setting up database...")
 from backend.utils.database import init_database, load_scored_logs_to_db
 init_database()
 load_scored_logs_to_db()
 
-print("✅ Startup complete!")
+print("Setup complete!")
