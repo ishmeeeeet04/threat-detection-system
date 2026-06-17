@@ -17,8 +17,8 @@ def create_app():
     @app.route("/")
     def home():
         return jsonify({
-            "message": "AI Threat Detection API is running",
-            "status" : "online",
+            "message"  : "AI Threat Detection API is running",
+            "status"   : "online",
             "endpoints": [
                 "GET  /api/logs",
                 "GET  /api/alerts",
@@ -28,6 +28,10 @@ def create_app():
                 "POST /api/analyse"
             ]
         })
+
+    @app.route("/health")
+    def health():
+        return jsonify({"status": "ok"}), 200
 
     @app.errorhandler(404)
     def not_found(e):
@@ -41,7 +45,6 @@ def create_app():
 
 
 if __name__ == "__main__":
-    # Run setup
     os.makedirs("data", exist_ok=True)
     os.makedirs("backend/models", exist_ok=True)
 
@@ -59,4 +62,9 @@ if __name__ == "__main__":
     detector.load_model()
 
     app = create_app()
-    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)
+    app.run(
+        host        = "0.0.0.0",
+        port        = 5000,
+        debug       = True,
+        use_reloader= False
+    )
