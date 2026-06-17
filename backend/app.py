@@ -3,31 +3,23 @@ from flask_cors import CORS
 import sys
 import os
 
-# Add project root to Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from backend.routes.api import api
-from backend.utils.database import init_database, load_scored_logs_to_db
 
 
 def create_app():
     """Create and configure the Flask application."""
 
     app = Flask(__name__)
-
-    # CORS allows our frontend HTML file to call this API
-    # Without this, the browser would block the requests
     CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-    # Register our API routes under the /api prefix
+    from backend.routes.api import api
     app.register_blueprint(api, url_prefix="/api")
 
-    # ── Health check endpoint ──────────────────────────────────
     @app.route("/")
     def home():
         return jsonify({
-            "message": "🛡️ AI Threat Detection API is running",
-            "version": "1.0.0",
+            "message"  : "🛡️ AI Threat Detection API is running",
+            "version"  : "1.0.0",
             "endpoints": [
                 "GET  /api/logs",
                 "GET  /api/alerts",
@@ -50,37 +42,48 @@ def create_app():
     return app
 
 
+def setup():
+    """Run setup — generate data, train model, init database."""
+    print("🔄 Running setup …")
+
+    # Generate sample logs if they don't exist
+    if not os.path.exists("data/sample_logs.csv"):
+        print("📊 Generating sample log data …")
+        import subprocess
+        subprocess.run([sys.executable, "data/generate_logs.py"], check=True)
+
+    # Train model if it doesn't exist
+    if not os.path.exists("backend/models/isolation_forest.pkl"):
+        print("🤖 Training ML model …")
+        import subprocess
+        subprocess.run([sys.executable, "ml/train_model.py"], check=True)
+
+    # Init database and load data
+    print("📦 Setting up database …")
+    from backend.utils.database import init_database, load_scored_logs_to_db
+    init_database()
+    load_scored_logs_to_db()
+
+    print("✅ Setup complete!")
+
+
 if __name__ == "__main__":
     print("🛡️  AI Threat Detection System — Starting up …\n")
 
-    # Step 1: Initialise database tables
-    print("📦 Initialising database …")
-    init_database()
+    setup()
 
-    # Step 2: Load scored logs into database
-    print("📂 Loading scored logs …")
-    count = load_scored_logs_to_db()
-
-    if count == 0:
-        print("\n⚠️  No data loaded. Make sure you have run:")
-        print("   python ml/train_model.py")
-    else:
-        print(f"   ✅ {count} log entries loaded")
-
-    # Step 3: Load ML model
     print("\n🤖 Loading ML model …")
     from ml.detector import detector
     detector.load_model()
 
-    # Step 4: Start the server
     print("\n🚀 Starting Flask server …")
     print("   URL: http://127.0.0.1:5000")
     print("   Press Ctrl+C to stop\n")
 
     app = create_app()
     app.run(
-        host="0.0.0.0",
-        port=5001,
-        debug=True,     # Auto-restarts when you change code
-        use_reloader=False  # Prevents double model loading in debug mode
+        host        = "0.0.0.0",
+        port        = 5000,
+        debug       = True,
+        use_reloader= False
     )

@@ -1,1 +1,1 @@
-web: gunicorn backend.app:create_app --bind 0.0.0.0:$PORT
+web: python startup.py && gunicorn backend.app:create_app --bind 0.0.0.0:$PORT
