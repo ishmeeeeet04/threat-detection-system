@@ -43,7 +43,7 @@ This project works like a mini Security Operations Center (SOC). It reads system
 | Anomaly Detection | Isolation Forest ML model trained on 1000 log entries |
 | Threat Scoring | Every event scored 0 to 100 |
 | Severity Levels | LOW, MEDIUM, HIGH, CRITICAL |
-| REST API | 7 endpoints serving all dashboard data |
+| REST API | 8 endpoints serving all dashboard data |
 | Interactive Dashboard | Charts, alerts table, IP analysis, live threat feed |
 | Real-time Analysis | Analyse any log entry instantly using the form |
 | Automated Tests | 12 pytest tests covering all endpoints |
@@ -162,7 +162,7 @@ threat-detection-system/
 
 │   ├── routes/
 
-│   │   └── api.py                  # All 7 API endpoints
+│   │   └── api.py                  # All 8 API endpoints
 
 │   └── utils/
 
@@ -303,12 +303,16 @@ python -m http.server 5500
 ```
 
 Now open your browser to:
-http://127.0.0.1:5500/index.html
+
+```http://127.0.0.1:5500/index.html```
+
 The dashboard's `API` variable in `dashboard.js` is already pointed at
 the live deployed backend, so this works whether your local Flask
 server is running or not. If you want it to talk to your *local* backend
 instead, change the `API` constant at the top of `dashboard.js` to
+
 `http://127.0.0.1:5000`.
+
 
 ---
 
@@ -327,6 +331,7 @@ Base URL (live): `https://threat-detection-system-g6nm.onrender.com`
 | GET | `/api/threats/timeline` | Threat counts grouped by hour |
 | GET | `/api/threats/top-ips` | Top 10 most suspicious IPs |
 | POST | `/api/analyse` | Analyse a single log entry |
+| POST | `/api/reload` | Reload the trained model and configuration without restarting the server |
 
 ### Query Parameters
 GET /api/logs?limit=50          Returns 50 entries
