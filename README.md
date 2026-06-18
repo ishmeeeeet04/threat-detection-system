@@ -35,6 +35,21 @@ This project works like a mini Security Operations Center (SOC). It reads system
 
 ---
 
+## 📸 Screenshots
+
+**Dashboard Overview**
+![Dashboard Overview](docs/screenshots/dashboard-overview.png)
+
+**Live Alerts**
+![Alerts Table](docs/screenshots/alerts-table.png)
+
+**Real-Time Threat Analysis**
+![Live Analysis](docs/screenshots/live-analysis.png)
+
+**Threat Timeline**
+![Threat Timeline](docs/screenshots/threat-timeline.png)
+
+
 ## 📸 Project Features
 
 | Feature | Description |
