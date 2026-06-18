@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.11+-blue?style=flat-square)
 ![Flask](https://img.shields.io/badge/Flask-3.0-green?style=flat-square)
 ![ML](https://img.shields.io/badge/ML-Isolation%20Forest-orange?style=flat-square)
-![Tests](https://img.shields.io/badge/Tests-12%20Passing-brightgreen?style=flat-square)
+![Tests](https://github.com/ishmeeeeet04/threat-detection-system/actions/workflows/tests.yml/badge.svg)
 ![License](https://img.shields.io/badge/License-MIT-purple?style=flat-square)
 
 A full-stack cybersecurity application that uses machine learning to analyse system authentication logs, detect anomalies, assign threat scores, and display real-time security alerts on an interactive dashboard.
