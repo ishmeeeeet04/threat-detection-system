@@ -17,7 +17,8 @@ A full-stack cybersecurity application that uses machine learning to analyse sys
 **To view the dashboard locally:**
 1. Clone this repository
 2. Follow the setup steps below
-3. Open `frontend/index.html` in your browser
+3. Serve the frontend folder with a local server (do NOT double-click the
+   HTML file directly — see Step 8 below for why)
 
 ---
 
@@ -127,6 +128,25 @@ Displays charts, tables, and live alerts
 **Why Isolation Forest?**
 Unlike other ML algorithms, Isolation Forest does not need labelled data. You do not need to tell it which logs are attacks and which are normal. It learns normal patterns on its own and flags anything unusual. This makes it perfect for real-world cybersecurity where you rarely have perfectly labelled attack data.
 
+**Measured Performance**
+
+Since the synthetic data generator labels every entry as normal or
+suspicious, I used that label purely for evaluation (never for training,
+since Isolation Forest is unsupervised). Measured on the generated dataset:
+
+- Precision: 0.87 (87% of flagged alerts are real attacks)
+- Recall: 1.00 (100% of real attacks get caught)
+- F1 score: 0.93
+- False positive rate: 4.9%
+
+**Known limitation:** the model's contamination parameter is set to 0.25,
+matching this generator's known attack ratio. In a real deployment you
+would not know this number in advance, so this number is a controlled
+benchmark, not a claim about real-world accuracy. The scoring is a 50/50
+blend of the ML model's anomaly signal and rule-based heuristics
+(failed-attempt thresholds, off-hours logins, root targeting), and the
+API exposes both components separately so an analyst can see why
+something was flagged, not just that it was.
 ---
 
 ## 📁 Project Structure
@@ -265,9 +285,30 @@ python backend/app.py
 
 The server will start at `http://127.0.0.1:5000`
 
-**8. Open the dashboard**
 
-Open `frontend/index.html` in your browser. Make sure the `API` variable at the top of `dashboard.js` points to `http://127.0.0.1:5000`.
+**8. Serve and open the dashboard**
+
+The API only accepts browser requests from `http://127.0.0.1:5500` (see
+the CORS configuration in `backend/app.py`). Opening `index.html` by
+double-clicking it will NOT work, browsers load local files with no
+real origin, and the request gets silently blocked.
+
+Instead, open a **new terminal window** (leave your Flask server running
+in the other one), navigate into the frontend folder, and start a tiny
+local server:
+
+```bash
+cd frontend
+python -m http.server 5500
+```
+
+Now open your browser to:
+http://127.0.0.1:5500/index.html
+The dashboard's `API` variable in `dashboard.js` is already pointed at
+the live deployed backend, so this works whether your local Flask
+server is running or not. If you want it to talk to your *local* backend
+instead, change the `API` constant at the top of `dashboard.js` to
+`http://127.0.0.1:5000`.
 
 ---
 
