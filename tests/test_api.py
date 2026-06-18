@@ -228,4 +228,31 @@ def test_log_parser():
     assert "username"        in df.columns
     assert "failed_attempts" in df.columns
     assert "threat_score"    not in df.columns  # scores added later by ML
-    print("✅ Test 12 passed: Log parser working correctly")
+
+
+# ════════════════════════════════════════════════════════════
+# TEST 13 — Model quality regression guard
+# ════════════════════════════════════════════════════════════
+def test_model_quality_does_not_regress():
+    """
+    Guards against silent degradation of detection quality.
+    If a future change to features, training, or scoring quietly
+    breaks the model, this test fails instead of letting it slip
+    through unnoticed.
+    """
+    from ml.train_model import train
+    from sklearn.metrics import precision_score, recall_score
+
+    _, _, results = train(source="csv")
+
+    y_true = results["is_suspicious"]
+    y_pred = (results["threat_score"] >= 51).astype(int)
+
+    precision = precision_score(y_true, y_pred, zero_division=0)
+    recall = recall_score(y_true, y_pred, zero_division=0)
+
+    print(f"Precision: {precision:.2f}")
+    print(f"Recall: {recall:.2f}")
+    assert recall >= 0.85, f"Recall dropped to {recall:.2f}, expected at least 0.85"
+    assert precision >= 0.25, f"Precision dropped to {precision:.2f}, expected at least 0.25"
+    
