@@ -9,7 +9,7 @@ from flask_cors import CORS
 
 def create_app():
     app = Flask(__name__)
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    CORS(app, resources={r"/api/*": {"origins": ["http://127.0.0.1:5500"]}})
 
     from backend.routes.api import api
     app.register_blueprint(api, url_prefix="/api")
@@ -62,9 +62,10 @@ if __name__ == "__main__":
     detector.load_model()
 
     app = create_app()
+    debug_mode = os.environ.get("FLASK_DEBUG", "false").lower() == "true"
     app.run(
-        host        = "0.0.0.0",
-        port        = 5000,
-        debug       = True,
-        use_reloader= False
+    host="0.0.0.0",
+    port=5000,
+    debug=debug_mode,
+    use_reloader=False
     )
