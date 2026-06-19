@@ -164,6 +164,22 @@ API exposes both components separately so an analyst can see why
 something was flagged, not just that it was.
 ---
 
+**External Validation**
+
+To check whether this approach generalizes beyond synthetic data, I ran
+the same Isolation Forest technique against NSL-KDD, a public,
+peer-reviewed network intrusion benchmark, using its own feature schema
+(see `ml/external_validation.py`). With a realistic contamination
+setting (`"auto"`, no knowledge of the true attack ratio), precision was
+~0.66 but recall dropped to ~0.14, far below this project's synthetic
+results. Only when contamination was set to the dataset's true known
+ratio, which assumes information you wouldn't have in a real deployment,
+did recall recover to ~0.67. This confirmed that the contamination
+parameter is doing a lot of the work in this project's strong synthetic
+numbers, and that a real deployment would need either a different
+anomaly-detection strategy or a principled way to estimate contamination
+rather than assuming it.
+
 ## 📁 Project Structure
 threat-detection-system/
 
