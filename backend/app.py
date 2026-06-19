@@ -1,5 +1,6 @@
 import os
 import sys
+from backend.utils.limiter import limiter
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -10,6 +11,7 @@ from flask_cors import CORS
 def create_app():
     app = Flask(__name__)
     CORS(app, resources={r"/api/*": {"origins": ["http://127.0.0.1:5500"]}})
+    limiter.init_app(app)
 
     from backend.routes.api import api
     app.register_blueprint(api, url_prefix="/api")

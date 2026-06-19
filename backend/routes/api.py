@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from backend.utils.validation import validate_analyse_input
 import sys
 import os
+from backend.utils.limiter import limiter
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
@@ -189,6 +190,7 @@ def get_top_ips():
 # POST /api/analyse
 # Accepts a single log entry JSON and returns threat assessment
 # ─────────────────────────────────────────────────────────────
+@limiter.limit("10 per minute")
 @api.route("/analyse", methods=["POST"])
 def analyse_log():
     data = request.get_json()
