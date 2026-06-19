@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request
+from backend.utils.validation import validate_analyse_input
 import sys
 import os
 
@@ -204,15 +205,13 @@ def analyse_log():
         }), 400
 
     # Fill in defaults for optional fields
-    entry = {
-        "timestamp"      : data.get("timestamp", ""),
-        "ip_address"     : data["ip_address"],
-        "username"       : data["username"],
-        "status"         : data["status"],
-        "failed_attempts": int(data.get("failed_attempts", 1)),
-        "port"           : int(data.get("port", 22)),
-        "hour"           : int(data["hour"])
-    }
+    entry, validation_errors = validate_analyse_input(data)
+    if validation_errors:
+        return jsonify({
+            "success": False,
+            "error"  : "Invalid input",
+            "details": validation_errors
+        }), 400
 
     result = detector.analyse_single(entry)
 
