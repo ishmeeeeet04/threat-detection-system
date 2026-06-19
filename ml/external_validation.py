@@ -5,7 +5,7 @@ pipeline, run on a different dataset with a different feature schema,
 specifically to check whether Isolation Forest as a general technique
 generalizes beyond this project's own synthetic data.
 """
-
+import os
 import pandas as pd
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler
@@ -26,7 +26,8 @@ COLUMNS = [
     "label","difficulty"
 ]
 
-DATA_PATH = r"C:\Users\DELL\Desktop\nsl-kdd-data\KDDTrain+_20Percent.txt" # adjust path if needed
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(SCRIPT_DIR, "..", "nsl-kdd-data", "KDDTrain+_20Percent.txt")
 
 df = pd.read_csv(DATA_PATH, names=COLUMNS)
 df["is_attack"] = (df["label"] != "normal").astype(int)

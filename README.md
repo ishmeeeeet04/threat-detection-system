@@ -61,7 +61,7 @@ This project works like a mini Security Operations Center (SOC). It reads system
 | REST API | 8 endpoints serving all dashboard data |
 | Interactive Dashboard | Charts, alerts table, IP analysis, live threat feed |
 | Real-time Analysis | Analyse any log entry instantly using the form |
-| Automated Tests | 12 pytest tests covering all endpoints |
+| Automated Tests | 13 pytest tests covering all endpoints |
 
 ---
 
@@ -164,7 +164,7 @@ API exposes both components separately so an analyst can see why
 something was flagged, not just that it was.
 ---
 
-**External Validation**
+## 🔬 External Validation
 
 To check whether this approach generalizes beyond synthetic data, I ran
 the same Isolation Forest technique against NSL-KDD, a public,
@@ -239,7 +239,7 @@ threat-detection-system/
 
 ├── tests/
 
-│   └── test_api.py                 # 12 automated pytest tests
+│   └── test_api.py                 # 13 automated pytest tests
 
 │
 
@@ -462,7 +462,7 @@ tests/test_api.py::test_analyse_missing_fields PASSED
 tests/test_api.py::test_threat_scorer          PASSED
 
 tests/test_api.py::test_log_parser             PASSED
-12 passed in 3.45s
+13 passed in 3.45s
 
 **What each test covers:**
 
@@ -480,6 +480,7 @@ tests/test_api.py::test_log_parser             PASSED
 | test_analyse_missing_fields | Returns 400 for bad input |
 | test_threat_scorer | Scorer returns correct levels |
 | test_log_parser | Parser loads data from CSV correctly |
+| test_model_quality_does_not_regress | Ensures model precision and recall stay above acceptable thresholds |
 
 ---
 
