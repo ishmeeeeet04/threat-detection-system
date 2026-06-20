@@ -3,16 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🛡️ AI Threat Detection Dashboard</title>
+  <title>AI Threat Detection Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
   <!-- ── Header ─────────────────────────────────────────── -->
   <header class="header">
     <div class="header-left">
-      <span class="logo">🛡️</span>
+      <span class="logo"><i data-lucide="shield-alert"></i></span>
       <div>
         <h1>AI Threat Detection System</h1>
         <p class="subtitle">Real-time log analysis and anomaly detection</p>
@@ -23,7 +27,7 @@
         <span class="status-dot"></span>
         <span>System Online</span>
       </div>
-      <button class="refresh-btn" onclick="loadAllData()">↻ Refresh</button>
+      <button class="refresh-btn" onclick="loadAllData()"><i data-lucide="refresh-cw"></i> Refresh</button>
     </div>
   </header>
 
@@ -166,7 +170,7 @@
 
     <!-- ── Analyse Single Log ────────────────────────────── -->
     <section class="card full-width">
-      <h2 class="chart-title">🔍 Analyse a Log Entry</h2>
+      <h2 class="chart-title"><i data-lucide="search"></i> Analyse a Log Entry</h2>
       <p class="section-desc">Enter log details below to get an instant threat assessment from the AI model.</p>
       <div class="analyse-form">
         <div class="form-row">
@@ -199,7 +203,7 @@
           </div>
         </div>
         <button class="analyse-btn" onclick="analyseLog()">
-          🤖 Analyse with AI
+          <i data-lucide="sparkles"></i> Analyse Log Entry
         </button>
       </div>
 
@@ -216,10 +220,13 @@
   </main>
 
   <footer class="footer">
-    <p>🛡️ AI Threat Detection System &nbsp;|&nbsp; Built with Python, Flask, Isolation Forest &nbsp;|&nbsp; Portfolio Project</p>
+ <p>AI Threat Detection System &nbsp;|&nbsp; Built with Python, Flask, Isolation Forest &nbsp;|&nbsp; Portfolio Project</p>
   </footer>
 
   <script src="dashboard.js"></script>
+  <script>lucide.createIcons();</script>
+
+
 
 </body>
 </html>
