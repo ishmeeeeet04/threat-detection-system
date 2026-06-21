@@ -8,10 +8,10 @@ let timelineChart    = null;
 
 // ── Colour map for threat levels ────────────────────────────
 const LEVEL_COLORS = {
-  LOW     : "#22c55e",
-  MEDIUM  : "#f59e0b",
-  HIGH    : "#ef4444",
-  CRITICAL: "#a855f7"
+  LOW     : "#5b8a72",
+  MEDIUM  : "#c9952c",
+  HIGH    : "#c0654a",
+  CRITICAL: "#9c3b30"
 };
 
 // ════════════════════════════════════════════════════════════
@@ -117,11 +117,11 @@ async function loadTimelineChart() {
     data: {
       labels  : labels,
       datasets: [
-        {
+       {
           label          : "Total Events",
           data           : totals,
-          borderColor    : "#3b82f6",
-          backgroundColor: "rgba(59,130,246,0.1)",
+          borderColor    : "#6b8fa3",
+          backgroundColor: "rgba(107,143,163,0.1)",
           fill           : true,
           tension        : 0.4,
           pointRadius    : 3
@@ -129,8 +129,8 @@ async function loadTimelineChart() {
         {
           label          : "Anomalies",
           data           : anomalies,
-          borderColor    : "#ef4444",
-          backgroundColor: "rgba(239,68,68,0.1)",
+          borderColor    : "#c0654a",
+          backgroundColor: "rgba(192,101,74,0.1)",
           fill           : true,
           tension        : 0.4,
           pointRadius    : 3
@@ -138,8 +138,8 @@ async function loadTimelineChart() {
         {
           label          : "Avg Threat Score",
           data           : avgScores,
-          borderColor    : "#f59e0b",
-          backgroundColor: "rgba(245,158,11,0.05)",
+          borderColor    : "#c9952c",
+          backgroundColor: "rgba(201,149,44,0.05)",
           fill           : false,
           tension        : 0.4,
           pointRadius    : 3,
@@ -167,7 +167,7 @@ async function loadTimelineChart() {
         },
         y2: {
           position: "right",
-          ticks   : { color: "#f59e0b", font: { size: 11 } },
+          ticks   : { color: "#c9952c", font: { size: 11 } },
           grid    : { display: false }
         }
       }
@@ -367,7 +367,7 @@ function showLoadingState() {
 
 function showError(msg) {
   document.getElementById("alerts-list").innerHTML =
-    `<p style="color:#ef4444;padding:16px">${msg}</p>`;
+   `<p style="color:#c0654a;padding:16px">${msg}</p>`;
 }
 
 // ── Start loading when page opens ───────────────────────────
